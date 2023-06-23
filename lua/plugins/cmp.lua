@@ -7,8 +7,7 @@ return {
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-cmdline",
-		"L3MON4D3/LuaSnip",
-		"f3fora/cmp-spell"
+		"f3fora/cmp-spell",
 	},
 	event = "VeryLazy",
 	config = function()
@@ -19,11 +18,6 @@ return {
 		local autopairs = require("nvim-autopairs.completion.cmp")
 		cmp.event:on("confirm_done", autopairs.on_confirm_done())
 		cmp.setup({
-			snippet = {
-				expand = function(args)
-					require('luasnip').lsp_expand(args.body)
-				end,
-			},
 			window = {
 				-- completion = cmp.config.window.bordered(),
 				-- documentation = cmp.config.window.bordered(),
@@ -66,14 +60,14 @@ return {
 						if cmp.visible() then
 							cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
 						elseif vim.fn["UltiSnips#CanJumpBackwards"]() == 1 then
-							return vim.api.nvim_feedkeys( t("<Plug>(ultisnips_jump_backward)"), 'm', true)
+							return vim.api.nvim_feedkeys(t("<Plug>(ultisnips_jump_backward)"), 'm', true)
 						else
 							fallback()
 						end
 					end,
 					s = function(fallback)
 						if vim.fn["UltiSnips#CanJumpBackwards"]() == 1 then
-							return vim.api.nvim_feedkeys( t("<Plug>(ultisnips_jump_backward)"), 'm', true)
+							return vim.api.nvim_feedkeys(t("<Plug>(ultisnips_jump_backward)"), 'm', true)
 						else
 							fallback()
 						end
@@ -85,9 +79,18 @@ return {
 				['<C-e>'] = cmp.mapping.abort(),
 				['<CR>'] = cmp.mapping.confirm({ select = true }),
 			}),
+			snippet = {
+				expand = function(args)
+					local luasnip = require("luasnip")
+					if not luasnip then
+						return
+					end
+					luasnip.lsp_expand(args.body)
+				end
+			},
 			sources = cmp.config.sources({
-				{ name = 'nvim_lsp' },
-				{ name = 'luasnip' },
+					{ name = 'nvim_lsp' },
+					{ name = 'luasnip' },
 				}, {
 					{ name = 'buffer' },
 				},
@@ -105,8 +108,8 @@ return {
 		cmp.setup.filetype('gitcommit', {
 			sources = cmp.config.sources({
 				{ name = 'cmp_git' }
-				}, {
-					{ name = 'buffer' },
+			}, {
+				{ name = 'buffer' },
 			})
 		})
 		cmp.setup.cmdline({ '/', '?' }, {
@@ -119,10 +122,9 @@ return {
 			mapping = cmp.mapping.preset.cmdline(),
 			sources = cmp.config.sources({
 				{ name = 'path' }
-				}, {
-					{ name = 'cmdline' }
+			}, {
+				{ name = 'cmdline' }
 			})
 		})
 	end,
 }
-

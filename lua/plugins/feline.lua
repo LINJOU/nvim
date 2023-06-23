@@ -57,8 +57,7 @@ local icons = {
 	change = " ",
 	file = " ",
 	col = ": ",
-	readonly = "",
-	noreadonly = "",
+	neovim = "",
 	position = " ",
 }
 
@@ -98,32 +97,6 @@ local os_info = {
 local function get_os_info()
 	local os = vim.bo.fileformat:upper()
 	return os_info[os]
-end
-
-local function get_file_status()
-	local readonly = vim.o.readonly
-	local icon = ""
-	local color = ""
-	if readonly then
-		icon = icons.readonly
-		color = "red"
-	else
-		icon = icons.noreadonly
-		color = "fg"
-	end
-	return icon, color
-end
-
-local function get_file_status_icon()
-	local icon, _ = get_file_status()
-
-	return icon
-end
-
-local function get_file_status_color()
-	local _, color = get_file_status()
-
-	return color
 end
 
 local function position()
@@ -274,16 +247,6 @@ local comps = {
 			},
 			right_sep = "block",
 		},
-		status = {
-			provider = get_file_status_icon(),
-			hl = {
-				fg = get_file_status_color(),
-				bg = "green",
-				style = "bold",
-			},
-			left_sep = "block",
-			right_sep = "block",
-		},
 	},
 	position = {
 		provider = position,
@@ -306,6 +269,15 @@ local comps = {
 		},
 		right_sep = "block",
 	},
+	ide = {
+		provider = icons.neovim,
+		hl = {
+			bg = "green",
+			style = "bold"
+		},
+		left_sep = "block",
+		right_sep = "block",
+	}
 }
 
 local left = {
@@ -329,7 +301,7 @@ local right = {
 	comps.file.size,
 	comps.position,
 	comps.line_percentage,
-	comps.file.status,
+	comps.ide,
 }
 
 local components = {

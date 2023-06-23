@@ -32,6 +32,15 @@ keymap.set("n", "<C-j>", "<C-w>j")
 keymap.set("n", "<C-k>", "<C-w>k")
 keymap.set("n", "<C-l>", "<C-w>l")
 
+-- 删除
+-- 删除当前行之前内容
+keymap.set("n", "<leader>ck", ":1,.-1d<CR>")
+-- 删除当前行之后内容
+keymap.set("n", "<leader>cj", ":.+1,$d<CR>")
+-- 删除全部内容
+keymap.set("n", "<leader>ca", ":%d<CR>")
+
+
 -- 取消高亮
 keymap.set("n", "<leader><CR>", ":nohl<CR>")
 
