@@ -21,14 +21,13 @@ set("n", "L", "g_")
 set("n", "n", "nzzzv", { desc = "go to next search result with cursor centered" })
 set("n", "N", "Nzzzv", { desc = "go to prev search result with cursor centered" })
 
-set("n", "Q", ":q!<CR>")
-set("n", "q", ":wq<CR>")
+set("n", "Q", "<cmd>q!<CR>")
+set("n", "q", "<cmd>wq<CR>")
+set("n", "zz", "<cmd>wqa<CR>")
 
-set("n", "P", ":pu<CR>")
+set("n", "P", "<cmd>pu<CR>")
 
 set("n", "<leader>f", vim.lsp.buf.format)
-
-set({ "n", "v" }, "<leader>d", [["_d]])
 
 set("n", "x", '"_x', opts)
 
@@ -42,10 +41,11 @@ set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "go to next" })
 set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "go to prev" })
 set("n", "<leader>tc", "<cmd>tabnew %<CR>", { desc = "open current tab in new tab" })
 
-set("n", "<leader>sv", "<C-w>v", { desc = "split window vertically" })
-set("n", "<leader>sh", "<C-w>s", { desc = "split window horizontally" })
-set("n", "<leader>se", "<C-w>=", { desc = "make splits equal size" })
-set("n", "<leader>sd", "<cmd>close<CR>", { desc = "close current split" })
+set("n", "s", "", { desc = "clean default keymap"})
+set("n", "sv", "<C-w>v", { desc = "split window vertically" })
+set("n", "sh", "<C-w>s", { desc = "split window horizontally" })
+set("n", "se", "<C-w>=", { desc = "make splits equal size" })
+set("n", "sd", "<cmd>close<CR>", { desc = "close current split" })
 
 set("n", "<leader>h", "<C-w>h", { desc = "focus on the left window" })
 set("n", "<leader>l", "<C-w>l", { desc = "focus on the right window" })
@@ -53,8 +53,8 @@ set("n", "<leader>k", "<C-w>k", { desc = "focus on the top window" })
 set("n", "<leader>j", "<C-w>h", { desc = "focus on the bottom window" })
 
 -- visual
-set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move lines down in visual selection" })
-set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move lines up in visual selection" })
+set("v", "J", ":m '>+1<CR>gv=gv", { silent = true, desc = "move lines down in visual selection" })
+set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "move lines up in visual selection" })
 
 set("v", "<", "<gv", opts)
 set("v", ">", ">gv", opts)

@@ -12,7 +12,7 @@ o.shiftwidth = 4
 o.expandtab = true
 o.autoindent = true
 o.smartindent = true
-o.wrap = false
+o.wrap = true
 
 o.swapfile = false
 o.backup = false
