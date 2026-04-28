@@ -1,5 +1,3 @@
-vim.cmd("let g:netrw_banner = 0")
-
 local o = vim.opt
 
 o.guicursor = ""
@@ -32,7 +30,7 @@ o.signcolumn = "yes"
 o.splitright = true
 o.splitbelow = true
 
-o.backspace = {"start", "eol", "indent"}
+o.backspace = { "start", "eol", "indent" }
 
 o.isfname:append("@-@")
 o.clipboard:append("unnamedplus")

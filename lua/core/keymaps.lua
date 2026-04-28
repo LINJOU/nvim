@@ -8,6 +8,9 @@ vim.g.maplocalleader = " "
 set("i", "jk", "<ESC>")
 
 -- normal
+set("n", "j", "gj", { desc = "down (wrap-aware)" })
+set("n", "k", "gk", { desc = "up (wrap-aware)" })
+
 set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search hl", silent = true })
 
 set("n", "<C-d>", "<C-d>zz", { desc = "move down in buffer with cursor centered" })
@@ -31,7 +34,12 @@ set("n", "<leader>f", vim.lsp.buf.format)
 
 set("n", "x", '"_x', opts)
 
-set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "replace word cursor is on globally" })
+set(
+	"n",
+	"<leader>r",
+	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = "replace word cursor is on globally" }
+)
 
 set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "makes file executable" })
 
@@ -41,16 +49,11 @@ set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "go to next" })
 set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "go to prev" })
 set("n", "<leader>tc", "<cmd>tabnew %<CR>", { desc = "open current tab in new tab" })
 
-set("n", "s", "", { desc = "clean default keymap"})
+set("n", "s", "", { desc = "clean default keymap" })
 set("n", "sv", "<C-w>v", { desc = "split window vertically" })
 set("n", "sh", "<C-w>s", { desc = "split window horizontally" })
 set("n", "se", "<C-w>=", { desc = "make splits equal size" })
 set("n", "sd", "<cmd>close<CR>", { desc = "close current split" })
-
-set("n", "<leader>h", "<C-w>h", { desc = "focus on the left window" })
-set("n", "<leader>l", "<C-w>l", { desc = "focus on the right window" })
-set("n", "<leader>k", "<C-w>k", { desc = "focus on the top window" })
-set("n", "<leader>j", "<C-w>h", { desc = "focus on the bottom window" })
 
 -- visual
 set("v", "J", ":m '>+1<CR>gv=gv", { silent = true, desc = "move lines down in visual selection" })

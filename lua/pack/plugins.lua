@@ -2,91 +2,101 @@
 local install_list = {}
 
 local plugin_list = {
-    -- pubilc
-    pubilc = {
-        "https://github.com/nvim-lua/plenary.nvim",
-    },
-    ui = {
-        "https://github.com/nvim-tree/nvim-web-devicons",
-        "https://github.com/neanias/everforest-nvim",
-    },
-    editor = {
-        "https://github.com/stevearc/oil.nvim",
-    },
-    treesitter = {
-        "https://github.com/nvim-treesitter/nvim-treesitter",
-    },
-    lsp = {
-        "https://github.com/rafamadriz/friendly-snippets",
-        "https://github.com/saghen/blink.cmp",
-        "https://github.com/neovim/nvim-lspconfig",
-        "https://github.com/mason-org/mason.nvim",
-        "https://github.com/mason-org/mason-lspconfig.nvim"
-    },
-    utils = {
-        "https://github.com/windwp/nvim-autopairs",
-    }
+	-- pubilc
+	pubilc = {
+		"https://github.com/nvim-lua/plenary.nvim",
+	},
+	ui = {
+		"https://github.com/nvim-tree/nvim-web-devicons",
+		"https://github.com/neanias/everforest-nvim",
+		"https://github.com/nvim-mini/mini.indentscope",
+	},
+	editor = {
+		"https://github.com/mikavilpas/yazi.nvim",
+		"https://github.com/alexpasmantier/tv.nvim",
+	},
+	treesitter = {
+		"https://github.com/nvim-treesitter/nvim-treesitter",
+	},
+	lsp = {
+		"https://github.com/neovim/nvim-lspconfig",
+		"https://github.com/mason-org/mason.nvim",
+		"https://github.com/mason-org/mason-lspconfig.nvim",
+		"https://github.com/xzbdmw/colorful-menu.nvim",
+		"https://github.com/rafamadriz/friendly-snippets",
+		"https://github.com/saghen/blink.cmp",
+	},
+	utils = {
+		"https://github.com/windwp/nvim-autopairs",
+		"https://github.com/folke/flash.nvim",
+		"https://github.com/stevearc/conform.nvim",
+		"https://github.com/kevinhwang91/nvim-ufo",
+		"https://github.com/lewis6991/gitsigns.nvim",
+	},
 }
 
 local function get_spec_name(spec)
-    local url = type(spec) == "table" and spec.src or spec
-    return url:match("([^/]+)$")
+	local url = type(spec) == "table" and spec.src or spec
+	return url:match("([^/]+)$")
 end
 
 for _, group in pairs(plugin_list) do
-    vim.list_extend(install_list, group)
+	vim.list_extend(install_list, group)
 end
 
 -- clean orphaned plugins
 vim.api.nvim_create_user_command("PmC", function()
+	local specs = {}
 
-    local specs = {}
+	if #install_list == 0 then
+		return
+	end
 
-    if #install_list == 0 then return end
+	for _, plugin in ipairs(install_list) do
+		table.insert(specs, get_spec_name(plugin))
+	end
 
-    for _, plugin in ipairs(install_list) do
-        table.insert(specs, get_spec_name(plugin))
-    end
+	local pack_dir = vim.fn.stdpath("data") .. "/site/pack/core/opt"
+	local pkgs = vim.fn.expand(pack_dir .. "/*", false, true)
 
-    local pack_dir = vim.fn.stdpath("data") .. "/site/pack/core/opt"
-    local pkgs = vim.fn.expand(pack_dir .. "/*", false, true)
+	if #pkgs == 0 then
+		return
+	end
+	--
+	local del_list = vim.iter(pkgs)
+		:map(function(pkg)
+			return vim.fn.fnamemodify(pkg, ":t")
+		end)
+		:filter(function(pkg)
+			return not vim.tbl_contains(specs, pkg)
+		end)
+		:totable()
 
-    if #pkgs == 0 then return end
--- 
-    local del_list = vim.iter(pkgs)
-        :map(function(pkg)
-            return vim.fn.fnamemodify(pkg, ":t")
-        end)
-        :filter(function(pkg)
-            return not vim.tbl_contains(specs, pkg)
-        end):totable()
-
-      if #del_list > 0 then
-          vim.schedule(function()
-              vim.pack.del(del_list)
-          end)
-      end
-
+	if #del_list > 0 then
+		vim.schedule(function()
+			vim.pack.del(del_list)
+		end)
+	end
 end, {
-    nargs = "*",
-    desc = "Clean Up Orphaned Plugins"
+	nargs = "*",
+	desc = "Clean Up Orphaned Plugins",
 })
 
 -- update plugins
 vim.api.nvim_create_user_command("PmU", function()
-    vim.pack.update()
+	vim.pack.update()
 end, {
-    nargs = "*",
-    desc = "Update Plugins"
+	nargs = "*",
+	desc = "Update Plugins",
 })
 
 vim.api.nvim_create_autocmd("PackChanged", {
-    pattern = "*",
-    callback = function(ev)
-        if ev.data.kind == "delete" then
-            vim.notify("Clean Up Orphaned Plugin: " .. ev.data.spec.name, vim.log.levels.INFO)
-        end
-    end
+	pattern = "*",
+	callback = function(ev)
+		if ev.data.kind == "delete" then
+			vim.notify("Clean Up Orphaned Plugin: " .. ev.data.spec.name, vim.log.levels.INFO)
+		end
+	end,
 })
 
 vim.pack.add(install_list)
